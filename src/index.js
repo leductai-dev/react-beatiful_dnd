@@ -1,17 +1,45 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { Component } from 'react'
+import initialData from './initial_data'
+import Column from './column'
+import { DragDropContext } from 'react-beautiful-dnd';
+import styled from 'styled-components'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+
+const Contain = styled.div`
+    width: 400px;
+    height: 600px;
+    background-color: gray;
+    padding: 10px;
+
+
+`
+
+
+class App extends Component {
+  state = initialData
+
+  onDragEnd = (result) =>{
+
+  }
+ 
+  render() {
+    return (
+      <Contain>
+      <DragDropContext
+    onDragEnd={this.onDragEnd}
+    >
+    {this.state.columnOrder.map(columnID =>{
+      const column = this.state.columns[columnID]
+      const tasks = column.taskID.map(taskID =>this.state.tasks[taskID])
+      return <Column key={column.id} column={column} tasks={tasks} />
+    }
+    )}
+    </DragDropContext>
+    </Contain>
+
+)}
+}
+
+ReactDOM.render(<App />,document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
